@@ -51,9 +51,6 @@ target
 # Gradle files #
 ################
 .gradle
-gradle
-gradlew
-gradlew.bat
 
 # Own utils #
 #############

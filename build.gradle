@@ -12,6 +12,10 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
+springBoot {
+    executable = true
+}
+
 jar {
     baseName = 'MarketsSimServer'
     version =  '0.1.0'

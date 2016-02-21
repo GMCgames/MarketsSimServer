@@ -35,6 +35,7 @@ public class MarketsSimService {
 	{
 		MarketsSimSymbol mss=null;
 		
+		System.out.println("Service...");
 		if ((country.compareTo("ES") != 0) && (!rt))
 		{
 			YQLSymbol sb = _yqlDelayService.getYQLSymbol("'"+ticker+"'");

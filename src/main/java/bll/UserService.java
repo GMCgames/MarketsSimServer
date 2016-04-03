@@ -1,21 +1,14 @@
 package bll;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import bll.model.MarketsSimUser;
 import dal.dao.UserDAO;
 import dal.repo.UserRepository;
 
 public class UserService implements UserDetailsService {
 
-	private final String ROLE_USER = "ROLE_USER";
 	private final UserRepository _userRepository;
 	
 	public UserService()
@@ -25,8 +18,8 @@ public class UserService implements UserDetailsService {
 	}
 	
 	@Override
-	public final User loadUserByUsername(String username) throws UsernameNotFoundException {
-		final UserDAO userFromDB = _userRepository.getUserByEmail(username);
+	public final MarketsSimUser loadUserByUsername(String username) throws UsernameNotFoundException {
+		final UserDAO userFromDB = _userRepository.getUserByUsername(username);
 		if (userFromDB == null) {
             throw new UsernameNotFoundException("user not found");
         }	
@@ -34,9 +27,7 @@ public class UserService implements UserDetailsService {
 	}
 	
 	// -- Private methods ---------------------------------------------
-	private User MapUserDAOToUser(UserDAO userDAO) {
-		List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-		grantedAuthorities.add(new SimpleGrantedAuthority(ROLE_USER));
-		return new User(userDAO.getEmail(), userDAO.getPassword(), grantedAuthorities);
+	private MarketsSimUser MapUserDAOToUser(UserDAO userDAO) {
+		return new MarketsSimUser(userDAO.getEmail(), userDAO.getUsername(), userDAO.getPassword());
 	}
 }

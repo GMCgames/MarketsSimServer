@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 
+import bll.model.MarketsSimUser;
 import bll.model.UserAuthentication;
 
 public class AuthenticationService {
@@ -22,14 +23,14 @@ public class AuthenticationService {
 	}
 	
 	public void addAuthentication(HttpServletResponse response, UserAuthentication authentication) {
-        final User user = authentication.getDetails();
+        final MarketsSimUser user = authentication.getDetails();
         response.addHeader(AUTH_HEADER_NAME, _tokenHelper.createTokenForUser(user));
     }
 
     public Authentication getAuthentication(HttpServletRequest request) {
         final String token = request.getHeader(AUTH_HEADER_NAME);
         if (token != null) {
-            final User user = _tokenHelper.parseUserFromToken(token);
+            final MarketsSimUser user = _tokenHelper.parseUserFromToken(token);
             if (user != null) {
                 return new UserAuthentication(user);
             }

@@ -3,12 +3,12 @@ package dal.dao;
 public class UserDAO {
 	private String _email;
 	private String _password;
-	private String _nick;
+	private String _username;
 	
-	public UserDAO(String email, String password, String nick) {
+	public UserDAO(String email, String username, String password) {
 		_email = email;
-		_password = password;
-		_nick = nick;
+		_username = username;
+		_password = password;		
 	}
 	
 	public String getEmail() {
@@ -19,7 +19,7 @@ public class UserDAO {
 		return _password;
 	}
 	
-	public String getNick() {
-		return _nick;
+	public String getUsername() {
+		return _username;
 	}
 }

@@ -3,10 +3,7 @@ package dal.repo;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.security.authentication.dao.ReflectionSaltSource;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
-import org.springframework.security.core.userdetails.User;
-
 import dal.dao.*;
 
 public class UserRepository {
@@ -14,13 +11,13 @@ public class UserRepository {
 	private List<UserDAO> _userTableMock;
 	
 	public UserRepository() {		
-		// Initialise the DB mock
+		// Initialise DB mock
 		InitialiseDBMock();
 	}
 	
-	public UserDAO getUserByEmail(String email) {
+	public UserDAO getUserByUsername(String username) {
 		for (UserDAO u : _userTableMock) {
-			if (email.equals(u.getEmail())) {
+			if (username.equals(u.getUsername())) {
 				return u;
 			}
 		}
@@ -28,21 +25,18 @@ public class UserRepository {
 	}
 
 	private void InitialiseDBMock(){
-		// Initialise Users table mock with 2 only valid users
+		// Initialise Users table mock with only 2 valid users
 		_userTableMock = new ArrayList<UserDAO>();
 		
-		_userTableMock.add(new UserDAO("user1@gmail.com",
-				getEncodedPassword("user1@gmail.com", "12345"), 
-				"user1"));
-		_userTableMock.add(new UserDAO("user2@gmail.com",
-				getEncodedPassword("user2@gmail.com", "67890"), 
-				"user2"));
+		_userTableMock.add(new UserDAO("user1@gmail.com", "user1",
+				getEncodedPassword("user1", "12345")));
+		_userTableMock.add(new UserDAO("user2@gmail.com", "user2",
+				getEncodedPassword("user2", "67890")));
 	}
 	
 	private String getEncodedPassword(String username, String rawPass) {
 		Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
 		String encPass = passwordEncoder.encodePassword(rawPass, username);
-		 System.out.println(encPass);
 		return encPass;
 	}
 }

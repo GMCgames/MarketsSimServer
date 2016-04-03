@@ -1,11 +1,9 @@
 package infrastructure.security.helpers;
 
-import org.springframework.security.core.userdetails.User;
-
 import bll.UserService;
+import bll.model.MarketsSimUser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-
 
 public class TokenHelper {
 	private final String SECRET;
@@ -19,7 +17,7 @@ public class TokenHelper {
     /**
      * Returns the User identified by the provided authentication token
      */
-    public User parseUserFromToken(String token) {
+    public MarketsSimUser parseUserFromToken(String token) {
         String username = Jwts.parser()
                 .setSigningKey(SECRET)
                 .parseClaimsJws(token)
@@ -31,7 +29,7 @@ public class TokenHelper {
     /**
      * Generates an authentication token for the provided User
      */
-    public String createTokenForUser(User user) {
+    public String createTokenForUser(MarketsSimUser user) {
         return Jwts.builder()
                 .setSubject(user.getUsername())
                 .signWith(SignatureAlgorithm.HS512, SECRET)

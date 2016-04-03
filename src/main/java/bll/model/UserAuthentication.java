@@ -4,14 +4,13 @@ import java.util.Collection;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 
 public class UserAuthentication implements Authentication {
 
-    private final User user;
+    private final MarketsSimUser user;
     private boolean authenticated = true;
 
-    public UserAuthentication(User user) {
+    public UserAuthentication(MarketsSimUser user) {
         this.user = user;
     }
 
@@ -31,7 +30,7 @@ public class UserAuthentication implements Authentication {
     }
 
     @Override
-    public User getDetails() {
+    public MarketsSimUser getDetails() {
         return user;
     }
 

@@ -1,7 +1,5 @@
 package infrastructure.security;
 
-import java.util.Collection;
-
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,20 +7,17 @@ import org.springframework.security.authentication.dao.ReflectionSaltSource;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import bll.UserService;
+import bll.model.MarketsSimUser;
 
-public class MarketsSimServerAuthProvider implements AuthenticationProvider {
+public class MarketsSimAuthProvider implements AuthenticationProvider {
 
 	// TODO: add
 	private UserService _userService;
 	private Md5PasswordEncoder _passwordEncoder;
 	
-	public MarketsSimServerAuthProvider(UserService userService) {
+	public MarketsSimAuthProvider(UserService userService) {
 		// TODO: implement dependency injection
 		_userService = userService;
 		_passwordEncoder = new Md5PasswordEncoder();
@@ -33,7 +28,7 @@ public class MarketsSimServerAuthProvider implements AuthenticationProvider {
 		String username = authentication.getName();
         String password = (String) authentication.getCredentials();
         
-        User user;
+        MarketsSimUser user;
         
         try {
         	user = _userService.loadUserByUsername(username);
@@ -46,9 +41,7 @@ public class MarketsSimServerAuthProvider implements AuthenticationProvider {
         	throw new BadCredentialsException("Wrong password.");
         }
         
-        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
-        
-        return new UsernamePasswordAuthenticationToken(user, password, authorities);
+        return new UsernamePasswordAuthenticationToken(user, password, user.getAuthorities());
 	}
 
 	@Override
@@ -58,7 +51,7 @@ public class MarketsSimServerAuthProvider implements AuthenticationProvider {
 	}
 
 	// Private methods
-	private Object getUserSaltForEncode(User user) {
+	private Object getUserSaltForEncode(MarketsSimUser user) {
 		ReflectionSaltSource saltSource = new ReflectionSaltSource();
         saltSource.setUserPropertyToUse("username");
         Object salt = saltSource.getSalt(user);     

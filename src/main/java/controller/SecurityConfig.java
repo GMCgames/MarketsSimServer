@@ -30,8 +30,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import bll.AuthenticationService;
 import bll.UserService;
-import infrastructure.security.MarketsSimServerAuthEntryPoint;
-import infrastructure.security.MarketsSimServerAuthProvider;
+import infrastructure.security.MarketsSimAuthEntryPoint;
+import infrastructure.security.MarketsSimAuthProvider;
 import infrastructure.security.filters.StatelessAuthenticationFilter;
 import infrastructure.security.filters.StatelessLoginFilter;
 
@@ -42,8 +42,8 @@ import infrastructure.security.filters.StatelessLoginFilter;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private final UserService _userService;
     private final AuthenticationService _authenticationService;
-    private final MarketsSimServerAuthEntryPoint _authEntryPoint;
-    private final MarketsSimServerAuthProvider _authProvider;
+    private final MarketsSimAuthEntryPoint _authEntryPoint;
+    private final MarketsSimAuthProvider _authProvider;
 
     public SecurityConfig() {
         super(true);
@@ -53,9 +53,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // TODO proof of concept: get secret from config file
         _authenticationService = new AuthenticationService("marketsSimServerAuthSecret", _userService);
     
-        _authEntryPoint = new MarketsSimServerAuthEntryPoint();
+        _authEntryPoint = new MarketsSimAuthEntryPoint();
         
-        _authProvider = new MarketsSimServerAuthProvider(_userService);
+        _authProvider = new MarketsSimAuthProvider(_userService);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // custom JSON based authentication by POST of 
             // {"username":"<name>","password":"<password>"} 
             // which sets the token header upon authentication
-            .addFilterBefore(new StatelessLoginFilter("/login", _userService, _authenticationService, authenticationManagerBean()), 
+            .addFilterBefore(new StatelessLoginFilter("/user/login", _userService, _authenticationService, authenticationManagerBean()), 
             	UsernamePasswordAuthenticationFilter.class)
             	
             // Custom Token based authentication based on the header previously given to the client

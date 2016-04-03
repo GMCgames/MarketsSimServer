@@ -13,15 +13,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import bll.AuthenticationService;
 import bll.UserService;
+import bll.model.MarketsSimUser;
 import bll.model.UserAuthentication;
-
 
 public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter  {
 
@@ -44,7 +42,7 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
 			FilterChain chain, Authentication authentication) throws IOException, ServletException {
 	 
 		// Lookup the complete User object from the database and create an Authentication for it
-		final User authenticatedUser = _userService.loadUserByUsername(authentication.getName());
+		final MarketsSimUser authenticatedUser = _userService.loadUserByUsername(authentication.getName());
 		final UserAuthentication userAuthentication = new UserAuthentication(authenticatedUser);
 	 
 		// Add the custom token as HTTP header to the response
@@ -57,10 +55,10 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException, IOException, ServletException {
-		String email = request.getParameter("email").toString();
+		String username = request.getParameter("username").toString();
 		String password = request.getParameter("password").toString();
 		final UsernamePasswordAuthenticationToken loginToken = 
-				new UsernamePasswordAuthenticationToken(email, password);
+				new UsernamePasswordAuthenticationToken(username, password);
 		
 		return getAuthenticationManager().authenticate(loginToken);
 	}

@@ -23,11 +23,18 @@ public class UserService implements UserDetailsService {
 		if (userFromDB == null) {
             throw new UsernameNotFoundException("user not found");
         }	
-		return MapUserDAOToUser(userFromDB);
+		return mapUserDAOToMarketsSimUser(userFromDB);
 	}
 	
+	public final void registerNewUser(MarketsSimUser user) {
+		_userRepository.insertNewUser(mapMarketsSimUserToUserDAO(user));
+	}
 	// -- Private methods ---------------------------------------------
-	private MarketsSimUser MapUserDAOToUser(UserDAO userDAO) {
+	private MarketsSimUser mapUserDAOToMarketsSimUser(UserDAO userDAO) {
 		return new MarketsSimUser(userDAO.getEmail(), userDAO.getUsername(), userDAO.getPassword());
+	}
+	
+	private UserDAO mapMarketsSimUserToUserDAO(MarketsSimUser user) {
+		return new UserDAO(user.getEmail(), user.getUsername(), user.getPassword());
 	}
 }
